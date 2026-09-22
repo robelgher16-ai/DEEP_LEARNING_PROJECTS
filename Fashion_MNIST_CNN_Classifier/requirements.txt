@@ -1,0 +1,10 @@
+torch
+torchvision
+fastapi
+uvicorn
+python-multipart
+pillow
+streamlit
+requests
+scikit-learn
+matplotlib
