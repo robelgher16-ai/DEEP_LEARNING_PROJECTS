@@ -1,6 +1,6 @@
 # ==========================================
 # Fashion MNIST CNN Classifier
-# Streamlit Frontend (API Version)
+# Streamlit Frontend (Render API Version)
 # ==========================================
 
 import streamlit as st
@@ -74,10 +74,10 @@ section[data-testid="stSidebar"] *{
 """, unsafe_allow_html=True)
 
 # ==========================================
-# API URL
+# RENDER API
 # ==========================================
 
-API_URL = "http://127.0.0.1:8000/predict"
+API_URL = "https://fashion-mnist-cnn-api.onrender.com/predict"
 
 # ==========================================
 # SIDEBAR
@@ -99,7 +99,7 @@ st.sidebar.write("Dropout")
 st.sidebar.write("Fully Connected")
 
 st.sidebar.markdown("---")
-st.sidebar.success("FastAPI Connected")
+st.sidebar.success("Render API Connected")
 
 # ==========================================
 # HERO
@@ -108,7 +108,7 @@ st.sidebar.success("FastAPI Connected")
 st.markdown("""
 <div class="hero">
 <h1>Fashion MNIST CNN Classifier</h1>
-<p>Professional Deep Learning Image Classification using Streamlit + FastAPI</p>
+<p>Professional Deep Learning Image Classification using PyTorch, FastAPI & Streamlit</p>
 </div>
 """, unsafe_allow_html=True)
 
@@ -121,8 +121,9 @@ c1, c2, c3 = st.columns(3)
 with c1:
     st.markdown("""
     <div class="card">
-    <h3>Images</h3>
+    <h3>Dataset</h3>
     <h2>70,000</h2>
+    <p>Fashion-MNIST Images</p>
     </div>
     """, unsafe_allow_html=True)
 
@@ -131,6 +132,7 @@ with c2:
     <div class="card">
     <h3>Classes</h3>
     <h2>10</h2>
+    <p>Clothing Categories</p>
     </div>
     """, unsafe_allow_html=True)
 
@@ -139,17 +141,18 @@ with c3:
     <div class="card">
     <h3>Backend</h3>
     <h2>FastAPI</h2>
+    <p>Hosted on Render</p>
     </div>
     """, unsafe_allow_html=True)
 
 st.write("")
 
 # ==========================================
-# IMAGE UPLOAD
+# FILE UPLOADER
 # ==========================================
 
 uploaded = st.file_uploader(
-    "Upload a Fashion-MNIST style image",
+    "Upload a Fashion-MNIST style clothing image",
     type=["png", "jpg", "jpeg"]
 )
 
@@ -157,99 +160,102 @@ if uploaded is not None:
 
     image = Image.open(uploaded).convert("L")
 
-    left, right = st.columns(2)
+    col1, col2 = st.columns(2)
 
-    with left:
+    with col1:
         st.image(image, caption="Uploaded Image", use_container_width=True)
 
-    with right:
-        st.image(image.resize((28,28)),
+    with col2:
+        st.image(image.resize((28, 28)),
                  caption="28×28 Preview",
                  use_container_width=True)
 
     st.write("")
 
-    # ======================================
-    # SEND IMAGE TO FASTAPI
-    # ======================================
+    with st.spinner("Predicting..."):
 
-    response = requests.post(
-        API_URL,
-        files={
-            "file": (
-                uploaded.name,
-                uploaded.getvalue(),
-                uploaded.type
+        try:
+
+            response = requests.post(
+                API_URL,
+                files={
+                    "file": (
+                        uploaded.name,
+                        uploaded.getvalue(),
+                        uploaded.type
+                    )
+                },
+                timeout=60
             )
-        }
-    )
 
-    if response.status_code == 200:
+            response.raise_for_status()
 
-        result = response.json()
+            result = response.json()
 
-        st.markdown(f"""
-        <div class="result">
-            <p>Predicted Class</p>
-            <h2>{result['prediction']}</h2>
-            <h3>{result['confidence']:.2f}% Confidence</h3>
-        </div>
-        """, unsafe_allow_html=True)
+            st.markdown(f"""
+            <div class="result">
+                <p>Predicted Class</p>
+                <h2>{result['prediction']}</h2>
+                <h3>{result['confidence']:.2f}% Confidence</h3>
+            </div>
+            """, unsafe_allow_html=True)
 
-        st.write("")
-        st.subheader("Top 3 Predictions")
+            st.write("")
+            st.subheader("Top 3 Predictions")
 
-        for item in result["top3"]:
+            for item in result["top3"]:
+                st.write(f"**{item['class']}**")
+                st.progress(item["confidence"] / 100)
+                st.caption(f"{item['confidence']:.2f}%")
 
-            st.write(f"**{item['class']}**")
-            st.progress(item["confidence"]/100)
-            st.caption(f"{item['confidence']:.2f}%")
+        except requests.exceptions.RequestException:
 
-    else:
-        st.error("Could not connect to the FastAPI server.")
+            st.error("""
+The prediction server is unavailable.
+
+Render free services sleep after inactivity.
+Please wait **30–60 seconds** and try again.
+""")
 
 # ==========================================
 # GEMINI TEST PROMPTS
 # ==========================================
 
-with st.expander("🧪 Hidden Test Prompts (Gemini)"):
+with st.expander("🧪 Hidden AI Test Prompts"):
 
     st.markdown("Generate Fashion-MNIST style images for testing.")
 
-    prompt = """
+    sneaker_prompt = """
 Generate a Fashion-MNIST style sneaker image.
 
 Requirements:
-- Single sneaker only
+- Single sneaker
 - Side view
 - Centered
 - Black background
-- White/light-gray object
+- White object
 - Grayscale only
-- 28×28 appearance
 - High contrast
-- Simple silhouette
-- No person
+- 28×28 appearance
 - No text
 - No logo
-- No shadow
 """
 
-    st.code(prompt)
+    st.code(sneaker_prompt)
 
     st.info("""
 Replace **Sneaker** with:
 
-T-shirt/Top
-Trouser
-Pullover
-Dress
-Coat
-Sandal
-Shirt
-Sneaker
-Bag
-Ankle Boot
+• T-shirt/Top
+• Trouser
+• Pullover
+• Dress
+• Coat
+• Sandal
+• Shirt
+• Sneaker
+• Bag
+• Ankle Boot
 """)
 
 # ==========================================
@@ -257,4 +263,4 @@ Ankle Boot
 # ==========================================
 
 st.markdown("---")
-st.caption("Deep Learning Project • Fashion MNIST CNN • Streamlit + FastAPI")
+st.caption("Developed by Robel Gebregziabher • Deep Learning Portfolio Project")
