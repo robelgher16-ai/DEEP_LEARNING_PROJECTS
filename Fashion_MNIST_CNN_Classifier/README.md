@@ -1,43 +1,59 @@
-# Fashion MNIST CNN Classifier
+# 👕 Fashion MNIST CNN Classifier
 
 A production-ready Deep Learning image classification project built with **PyTorch**, **FastAPI**, **Streamlit**, and deployed on **Render** and **Streamlit Community Cloud**.
 
-## Live Demo
+## 🌐 Live Demo
 
-**Streamlit App:** https://deeplearningprojects-robel.streamlit.app/
-
-**FastAPI API:** https://fashion-mnist-cnn-api.onrender.com
-
-**Swagger Docs:** https://fashion-mnist-cnn-api.onrender.com/docs
+- **Streamlit App:** https://deeplearningprojects-robel.streamlit.app/
+- **FastAPI API:** https://fashion-mnist-cnn-api.onrender.com/
+- **Swagger Docs:** https://fashion-mnist-cnn-api.onrender.com/docs
 
 ---
 
-## Project Overview
+## 📸 Screenshots
 
-This project classifies grayscale clothing images into **10 Fashion-MNIST categories** using a Convolutional Neural Network (CNN). It demonstrates the complete machine learning workflow from model training to cloud deployment.
+### 1. Home Page
+
+![Home](assets/01_home.png)
+
+### 2. Image Upload
+
+![Upload](assets/02_upload.png)
+
+### 3. Prediction Result
+
+![Prediction](assets/03_prediction.png)
+
+### 4. FastAPI Swagger API
+
+![Swagger](assets/04_swagger.png)
+
+---
+
+## 📖 Project Overview
+
+This project classifies grayscale clothing images into **10 Fashion-MNIST categories** using a Convolutional Neural Network (CNN). It demonstrates the complete deep learning workflow from model training to cloud deployment.
 
 ### Features
 
 - PyTorch CNN model
-- Batch Normalization & Dropout
+- Batch Normalization
+- Dropout Regularization
 - Early Stopping
 - FastAPI REST API
-- Streamlit interactive UI
-- Render cloud deployment
-- Streamlit Community Cloud deployment
-- Top-3 prediction probabilities
+- Streamlit Web Application
+- Render Cloud Deployment
+- Top-3 Prediction Probabilities
 
 ---
 
-## Dataset
+## 🧠 Dataset
 
 **Fashion-MNIST**
 
 - 70,000 grayscale images
-- Image size: 28×28
-- 10 clothing classes
-
-### Classes
+- 28 × 28 image size
+- 10 clothing categories
 
 | Label | Class       |
 | ----- | ----------- |
@@ -54,7 +70,7 @@ This project classifies grayscale clothing images into **10 Fashion-MNIST catego
 
 ---
 
-## CNN Architecture
+## 🏗 CNN Architecture
 
 ```text
 Input (1×28×28)
@@ -75,7 +91,7 @@ ReLU
       │
 MaxPool
       │
-Flatten (1568)
+Flatten
       │
 Linear (1568→128)
       │
@@ -85,33 +101,22 @@ Dropout
       │
 Linear (128→10)
       │
-Softmax Prediction
+Prediction
 ```
 
 ---
 
-## Project Structure
+## 📁 Project Structure
 
 ```text
 Fashion_MNIST_CNN_Classifier/
 │
+├── assets/
 ├── app/
-│   └── streamlit_app.py
-│
 ├── api/
-│   ├── __init__.py
-│   └── main.py
-│
 ├── src/
-│   ├── __init__.py
-│   └── model.py
-│
 ├── models/
-│   └── fashion_cnn_best.pth
-│
 ├── notebooks/
-│   └── Fashion_MNIST_CNN.ipynb
-│
 ├── requirements.txt
 ├── .gitignore
 └── README.md
@@ -119,94 +124,22 @@ Fashion_MNIST_CNN_Classifier/
 
 ---
 
-## Model Training
-
-| Parameter        |            Value |
-| ---------------- | ---------------: |
-| Optimizer        |             Adam |
-| Loss Function    | CrossEntropyLoss |
-| Epochs           |               20 |
-| Batch Size       |               64 |
-| Validation Split |              10% |
-| Early Stopping   |     Patience = 3 |
-| Input Size       |            28×28 |
-
----
-
-## Deployment Architecture
-
-```text
-          User
-            │
-            ▼
- Streamlit Community Cloud
-            │
-      HTTP Request
-            │
-            ▼
-   FastAPI (Render Cloud)
-            │
-            ▼
-   PyTorch CNN Model (.pth)
-            │
-            ▼
-      JSON Prediction
-            │
-            ▼
-      Streamlit Result
-```
-
----
-
-## API Endpoint
-
-### POST `/predict`
-
-Upload a clothing image and receive the predicted class.
-
-### Example Response
-
-```json
-{
-  "prediction": "Coat",
-  "confidence": 98.42,
-  "top3": [
-    {
-      "class": "Coat",
-      "confidence": 98.42
-    },
-    {
-      "class": "Pullover",
-      "confidence": 0.91
-    },
-    {
-      "class": "Shirt",
-      "confidence": 0.32
-    }
-  ]
-}
-```
-
----
-
-## Technologies Used
+## ⚙️ Technologies
 
 - Python
 - PyTorch
 - Torchvision
 - FastAPI
-- Uvicorn
 - Streamlit
 - Pillow
 - Requests
-- Matplotlib
-- Scikit-learn
+- Uvicorn
 
 ---
 
-## Running Locally
+## 🚀 Run Locally
 
-### Install
+### Install dependencies
 
 ```bash
 pip install -r requirements.txt
@@ -226,25 +159,10 @@ streamlit run app/streamlit_app.py
 
 ---
 
-## What I Learned
-
-- Convolutional Neural Networks (CNNs)
-- Image preprocessing
-- Batch Normalization
-- Dropout regularization
-- Early Stopping
-- Model serialization with PyTorch
-- Building REST APIs using FastAPI
-- Connecting Streamlit with FastAPI
-- Deploying AI applications to Render
-- Deploying Streamlit Community Cloud
-
----
-
-## Author
+## 👨‍💻 Author
 
 **Robel Gebregziabher**
 
-Information Technology Student | AI Engineer
+Information Technology Student • AI & Deep Learning Enthusiast
 
-GitHub: `robelgher16-ai`
+GitHub: **robelgher16-ai**
